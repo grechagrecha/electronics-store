@@ -13,8 +13,8 @@ class ItemDetailView(DetailView):
     template_name = 'core/product.html'
 
 
-class HomeView(TemplateView):
-    model = None
+class HomeView(ListView):
+    model = Item
     template_name = 'core/home.html'
 
 
