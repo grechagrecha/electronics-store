@@ -11,6 +11,7 @@ class Item(models.Model):
     units_sold = models.BigIntegerField()
     units_in_stock = models.BigIntegerField()
     slug = models.SlugField(unique=True, blank=True)
+    image = models.ImageField(default='', upload_to='images/', height_field=None, width_field=None, max_length=100)
 
     def __str__(self):
         return self.name
