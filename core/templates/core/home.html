@@ -31,7 +31,7 @@
             </div>
         </div>
         <div class="row">
-            {% for category in item_categories %}
+            {% for category in featured_categories %}
             <div class="col-12 col-md-4 p-5 mt-3">
                 <a href="#">
                     {% if category.image %}
@@ -56,11 +56,11 @@
                 </div>
             </div>
             <div class="row">
-                {% for item in object_list %}
+                {% for item in featured_products %}
                 <div class="col-12 col-md-4 mb-4">
                     <div class="card h-100">
                         <a href="{% url 'core:product' slug=item.slug %}">
-                            <img src="{{ item.image.url }}" class="card-img-top" alt="...">
+                            <img src="{{ item.main_image.url }}" class="card-img-top" alt="...">
                         </a>
                         <div class="card-body">
                             <ul class="list-unstyled d-flex justify-content-between">
