@@ -23,7 +23,9 @@ class Item(models.Model):
         })
 
     def get_add_to_cart_url(self):
-        return reverse('core:add-to-cart', kwargs={'slug': self.slug})
+        return reverse('core:add-to-cart', kwargs={
+            'slug': self.slug
+        })
 
     def create_slug(self):
         return f'{slugify(self.name)}'
@@ -40,7 +42,7 @@ class OrderedItem(models.Model):
     quantity = models.IntegerField(default=1)
 
     def __str__(self):
-        return 'ordered item' + self.item.name
+        return f'{self.quantity} of {self.item.name}'
 
 
 class Cart(models.Model):

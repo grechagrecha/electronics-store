@@ -46,7 +46,7 @@
                 <h1 class="h2 pb-4">Categories</h1>
                 <ul class="list-unstyled templatemo-accordion">
                     {% for category in item_categories %}
-                    <a class="collapsed d-flex justify-content-between h3 text-decoration-none" href="?{{ category.name.lower }}">
+                    <a class="collapsed d-flex justify-content-between h4 text-decoration-none" href="?category={{ category.name.lower }}">
                         {{ category.name }}
                     </a>
                     {% endfor %}
@@ -58,15 +58,14 @@
                     <div class="col-md-6 pb-4">
                         <div class="d-flex">
                             <select class="form-control">
-                                <option>Featured</option>
-                                <option>A to Z</option>
-                                <option>Item</option>
+                                <option value="featured">Featured</option>
+                                <option value="atoz">A to Z</option>
                             </select>
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    {% for item in object_list %}
+                    {% for item in items %}
                     <!-- Item -->
                     <div class="col-md-4">
                         <div class="card mb-4 product-wap rounded-0">
@@ -76,15 +75,21 @@
                                     <ul class="list-unstyled" id="item-card-menu">
                                         <!-- Add to favourites -->
                                         <li>
-                                            <a class="btn btn-success text-white" href=""><i class="far fa-heart"></i></a>
+                                            <a class="btn btn-success text-white" href="">
+                                                <i class="far fa-heart"></i>
+                                            </a>
                                         </li>
                                         <!-- Go to the product page -->
                                         <li>
-                                            <a class="btn btn-success text-white mt-2" href="{% url 'core:product' slug=item.slug %}"><i class="far fa-eye"></i></a>
+                                            <a class="btn btn-success text-white mt-2" href="{% url 'core:product' slug=item.slug %}">
+                                                <i class="far fa-eye"></i>
+                                            </a>
                                         </li>
                                         <!-- Add to cart -->
                                         <li>
-                                            <a class="btn btn-success text-white mt-2" href=""><i class="fas fa-cart-plus"></i></a>
+                                            <a class="btn btn-success text-white mt-2" href="{% url 'core:add-to-cart' slug=item.slug %}">
+                                                <i class="fas fa-cart-plus"></i>
+                                            </a>
                                         </li>
                                     </ul>
                                 </div>

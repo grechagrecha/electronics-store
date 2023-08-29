@@ -1,17 +1,48 @@
 from django.views.generic import ListView, DetailView, TemplateView
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
+from django.http import HttpResponse
 
 from .models import Item, ItemCategory, Cart, OrderedItem
 
+ITEM_CATEGORIES = [
+    str(category.name).lower() for category in ItemCategory.objects.all()
+]
 
-class StoreView(ListView):
+
+class ShopView(ListView):
     model = Item
     template_name = 'core/shop.html'
     paginate_by = 6
 
+    def get_sort_params(self):
+        return {
+            'category': self.request.GET.get('category')
+        }
+
+    def _validate_sort_parameters(self, sort_params: dict):
+        validated_sort_params = dict()
+        for key, value in sort_params.items():
+            if value:
+                if key == 'category':
+                    if value in ITEM_CATEGORIES:
+                        validated_sort_params[key] = value
+
+        return validated_sort_params
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        sort_params = self.get_sort_params()
+        sort_params = self._validate_sort_parameters(sort_params)
+
+        if sort_params:
+            context['items'] = Item.objects.filter(
+                itemcategory__name=sort_params.get('category')
+            )
+        else:
+            context['items'] = Item.objects.all()
+
         context['item_categories'] = ItemCategory.objects.all()
         return context
 
@@ -62,6 +93,7 @@ class CartView(ListView):
 
         context['user'] = cart_qs.user
         context['items'] = cart_qs.items.all()
+        print(context['items'])
 
         # :(
         # context['date'] = cart_qs.date
@@ -77,17 +109,26 @@ class ProfileView(TemplateView):
 def add_to_cart(request, slug):
     item = get_object_or_404(Item, slug=slug)
     ordered_item, created = OrderedItem.objects.get_or_create(item=item, user=request.user, ordered=False)
-    order_qs = Cart.objects.filter(user=request.user, ordered=False)
-    if order_qs.exists():
-        order = order_qs[0]
+    cart_qs = Cart.objects.filter(user=request.user, ordered=False)
+    if cart_qs.exists():
+        cart = cart_qs[0]
 
-        if order.items.filter(item__slug=item.slug).exists():
+        if cart.items.filter(item__slug=item.slug).exists():
             ordered_item.quantity += 1
             ordered_item.save()
         else:
-            order.items.add(ordered_item)
+            cart.items.add(ordered_item)
     else:
         ordered_date = timezone.now()
-        order = Cart.objects.create(user=request.user, ordered_date=ordered_date)
-        order.items.add(ordered_item)
+        cart = Cart.objects.create(user=request.user, ordered_date=ordered_date)
+        cart.items.add(ordered_item)
+
     return redirect('core:product', slug=slug)
+
+
+def remove_from_cart(request, slug):
+    return NotImplemented
+
+
+def order(request):
+    return NotImplemented
