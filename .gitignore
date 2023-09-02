@@ -241,3 +241,4 @@ cython_debug/
 
 /store/settings/local.py
 /.idea/
+/TODO.md

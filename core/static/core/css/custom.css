@@ -1,3 +1,14 @@
 /*
 Custom Css
 */
+
+.order-button {
+    margin: 0 auto;
+    padding-left: 5rem;
+    text-align: center !important;
+
+    font-family: 'Roboto', sans-serif;
+    font-size: 32px !important;
+    font-weight: 400 !important;
+    text-decoration: none !important;
+}
