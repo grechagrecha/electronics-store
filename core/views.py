@@ -44,7 +44,7 @@ class ShopView(ListView):
 
         context['item_categories'] = ItemCategory.objects.all()
         return context
-    
+
     def get_queryset(self):
         qs_filter_category = self.request.GET.get('category', '')
         if not qs_filter_category or qs_filter_category == 'all':
@@ -98,7 +98,6 @@ class CartView(ListView):
 
         context['user'] = cart_qs.user
         context['items'] = cart_qs.items.all()
-        print(context['items'])
 
         # :(
         # context['date'] = cart_qs.date
@@ -132,7 +131,20 @@ def add_to_cart(request, slug):
 
 
 def remove_from_cart(request, slug):
-    return NotImplemented
+    item = get_object_or_404(Item, slug=slug)
+    ordered_item, created = OrderedItem.objects.get_or_create(item=item, user=request.user, ordered=False)
+    cart_qs = Cart.objects.filter(user=request.user, ordered=False)
+
+    if cart_qs.exists():
+        cart = cart_qs[0]
+        if cart.items.filter(item__slug=item.slug).exists():
+            if ordered_item.quantity >= 2:
+                ordered_item.quantity -= 1
+                ordered_item.save()
+            else:
+                cart.items.remove(ordered_item)
+
+    return redirect('core:cart')
 
 
 def order(request):

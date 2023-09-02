@@ -26,9 +26,15 @@
                     <div class="card-body">
                         <ul class="list-unstyled d-flex justify-content-between">
                             <li class="text-green text-right" style="color:green">${{ ordered_item.item.price }}</li>
-                            <li class="text-green text-right" style="color:red; margin-left: auto; margin-right: 0;">{{ ordered_item.quantity }}</li>
+                            <li>
+                                <a class="btn btn-success text-white" href="{% url 'core:remove-from-cart' slug=ordered_item.item.slug %}">
+                                        <i>X</i>
+                                </a>
+                            </li>
+
                         </ul>
-                        <a style="font-weight: 400 !important;">{{ ordered_item.item.name }}</a>
+                        <a style="font-weight: 400 !important; text-decoration: none;" href="{% url 'core:product' slug=ordered_item.item.slug %}">{{ ordered_item.item.name }}</a>
+                        <a class="text-green text-right" style="color:red; margin-left: auto; margin-right: 0; text-decoration:none;">x{{ ordered_item.quantity }}</a>
                     </div>
                 </div>
             </div>
