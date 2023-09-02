@@ -45,8 +45,11 @@
             <div class="col-lg-3">
                 <h1 class="h2 pb-4">Categories</h1>
                 <ul class="list-unstyled templatemo-accordion">
+                    <a class="collapsed d-flex justify-content-between h4 text-decoration-none" href="?category=all&page={{ page_obj.number }}">
+                        All
+                    </a>
                     {% for category in item_categories %}
-                    <a class="collapsed d-flex justify-content-between h4 text-decoration-none" href="?category={{ category.name.lower }}">
+                    <a class="collapsed d-flex justify-content-between h4 text-decoration-none" href="?category={{ category.name_lowercase }}&page={{ page_obj.number }}">
                         {{ category.name }}
                     </a>
                     {% endfor %}
@@ -65,7 +68,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    {% for item in items %}
+                    {% for item in object_list %}
                     <!-- Item -->
                     <div class="col-md-4">
                         <div class="card mb-4 product-wap rounded-0">
@@ -108,11 +111,19 @@
                         {% for page in page_obj.paginator %}
                         {% if page.number == page_obj.number %}
                         <li class="page-item disabled">
-                            <a class="page-link active rounded-0 mr-3 shadow-sm border-top-0 border-left-0" href="?page={{ page.number }}" tabindex="-1">{{ page.number }}</a>
+                            <a
+                                    class="page-link active rounded-0 mr-3 shadow-sm border-top-0 border-left-0"
+                                    href="?category={{ category.name_lowercase }}&page={{ page.number }}"
+                                    tabindex="-1">{{ page.number }}
+                            </a>
                         </li>
                         {% else %}
                         <li class="page-item">
-                            <a class="page-link intive rounded-0 mr-3 shadow-sm border-top-0 border-left-0" href="?page={{ page.number }}" tabindex="-1">{{ page.number }}</a>
+                            <a
+                                    class="page-link intive rounded-0 mr-3 shadow-sm border-top-0 border-left-0"
+                                    href="?category={{ category.name_lowercase }}&page={{ page.number }}"
+                                    tabindex="-1">{{ page.number }}
+                            </a>
                         </li>
                         {% endif %}
                         {% endfor %}

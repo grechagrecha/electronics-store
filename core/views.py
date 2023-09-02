@@ -5,30 +5,29 @@ from django.http import HttpResponse
 
 from .models import Item, ItemCategory, Cart, OrderedItem
 
-ITEM_CATEGORIES = [
-    str(category.name).lower() for category in ItemCategory.objects.all()
-]
-
 
 class ShopView(ListView):
     model = Item
     template_name = 'core/shop.html'
     paginate_by = 6
 
-    def get_sort_params(self):
-        return {
-            'category': self.request.GET.get('category')
-        }
+    ITEM_CATEGORIES = [
+        str(category.name_lowercase) for category in ItemCategory.objects.all()
+    ]
 
-    def _validate_sort_parameters(self, sort_params: dict):
+    def _validate_sort_parameters(self, sort_params):
         validated_sort_params = dict()
         for key, value in sort_params.items():
             if value:
                 if key == 'category':
-                    if value in ITEM_CATEGORIES:
+                    if value in self.ITEM_CATEGORIES:
                         validated_sort_params[key] = value
-
         return validated_sort_params
+
+    def get_sort_params(self):
+        return {
+            'category': self.request.GET.get('category')
+        }
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -37,14 +36,20 @@ class ShopView(ListView):
         sort_params = self._validate_sort_parameters(sort_params)
 
         if sort_params:
-            context['items'] = Item.objects.filter(
-                itemcategory__name=sort_params.get('category')
+            context['items'] = self.model.objects.filter(
+                itemcategory__name_lowercase=sort_params.get('category')
             )
         else:
-            context['items'] = Item.objects.all()
+            context['items'] = self.model.objects.all()
 
         context['item_categories'] = ItemCategory.objects.all()
         return context
+    
+    def get_queryset(self):
+        qs_filter_category = self.request.GET.get('category', '')
+        if not qs_filter_category or qs_filter_category == 'all':
+            return self.model.objects.all().order_by('name')
+        return self.model.objects.filter(itemcategory__name_lowercase=qs_filter_category).order_by('name')
 
 
 class ItemDetailView(DetailView):

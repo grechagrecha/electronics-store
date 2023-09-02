@@ -13,6 +13,7 @@ class Item(models.Model):
     units_in_stock = models.BigIntegerField()
     slug = models.SlugField(unique=True, blank=True, editable=False)
     main_image = models.ImageField(default='', upload_to='img/', blank=True)
+    featured = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -36,6 +37,7 @@ class Item(models.Model):
 
 
 class OrderedItem(models.Model):
+    id = models.BigAutoField(primary_key=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     ordered = models.BooleanField(default=False)
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
@@ -46,6 +48,7 @@ class OrderedItem(models.Model):
 
 
 class Cart(models.Model):
+    id = models.BigAutoField(primary_key=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     items = models.ManyToManyField(OrderedItem)
     ordered = models.BooleanField(default=False)
@@ -57,10 +60,15 @@ class Cart(models.Model):
 
 class ItemCategory(models.Model):
     id = models.BigAutoField(primary_key=True)
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, default='')
+    name_lowercase = models.CharField(max_length=200, default='')
     image = models.ImageField(default='', upload_to='img/', blank=True)
     items = models.ManyToManyField(Item)
     number_of_items = models.IntegerField(editable=False, default=0)
 
     def __str__(self):
         return f'{self.name} ({self.number_of_items} items)'
+
+    def save(self, *args, **kwargs):
+        super(ItemCategory, self).save(*args, **kwargs)
+        self.name_lowercase = str(self.name).lower()
