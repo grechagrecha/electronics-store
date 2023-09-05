@@ -111,6 +111,9 @@ class ProfileView(TemplateView):
 
 
 def add_to_cart(request, slug):
+    if not request.user.is_authenticated:
+        return redirect('account_login')
+
     item = get_object_or_404(Item, slug=slug)
     ordered_item, created = OrderedItem.objects.get_or_create(item=item, user=request.user, ordered=False)
     cart_qs = Cart.objects.filter(user=request.user, ordered=False)
@@ -118,7 +121,7 @@ def add_to_cart(request, slug):
         cart = cart_qs[0]
 
         if cart.items.filter(item__slug=item.slug).exists():
-            ordered_item.quantity += 1
+            item.units_in_stock -= 1
             ordered_item.save()
         else:
             cart.items.add(ordered_item)
@@ -126,6 +129,9 @@ def add_to_cart(request, slug):
         ordered_date = timezone.now()
         cart = Cart.objects.create(user=request.user, ordered_date=ordered_date)
         cart.items.add(ordered_item)
+
+    item.units_in_stock -= 1
+    ordered_item.quantity += 1
 
     return redirect('core:product', slug=slug)
 
@@ -139,10 +145,11 @@ def remove_from_cart(request, slug):
         cart = cart_qs[0]
         if cart.items.filter(item__slug=item.slug).exists():
             if ordered_item.quantity >= 2:
-                ordered_item.quantity -= 1
                 ordered_item.save()
             else:
                 cart.items.remove(ordered_item)
+
+            item.units_in_stock += 1
 
     return redirect('core:cart')
 

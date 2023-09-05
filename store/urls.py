@@ -4,6 +4,8 @@ from django.conf.urls.static import static
 
 from store.settings.base import MEDIA_URL, MEDIA_ROOT, STATIC_URL, STATIC_ROOT
 
+app_name = 'store'
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
