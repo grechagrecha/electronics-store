@@ -72,22 +72,21 @@
                     <div class="card">
                         <div class="card-body">
                             <h1 class="h2">{{ item.name }}</h1>
-                            <p class="h3 py-2">{{ item.price }}$</p>
+                            <p class="h3 py-2" style="color: green;">{{ item.price }}$</p>
                             <h6>Description:</h6>
+                            {% if item.description %}
                             <p>{{ item.description }}</p>
-
+                            {% else %}
+                            <p>Here should have been item's description, but it seems it has been lost.</p>
+                            {% endif %}
                             <h6>Specification:</h6>
                             <ul class="list-unstyled pb-3">
-                                <li>Lorem ipsum dolor sit</li>
-                                <li>Amet, consectetur</li>
-                                <li>Adipiscing elit,set</li>
-                                <li>Duis aute irure</li>
-                                <li>Ut enim ad minim</li>
-                                <li>Dolore magna aliqua</li>
-                                <li>Excepteur sint</li>
+                                {% for attribute in item.attributes.all %}
+                                <li>{{ attribute }}</li>
+                                {% endfor %}
                             </ul>
 
-                            <form action="" method="GET">
+                            <form action="." method="POST">
                                 <input name="product-title" type="hidden" value="Activewear">
                                 <div class="row">
                                     <div class="col-auto">
@@ -106,15 +105,13 @@
                                         </ul>
                                     </div>
                                 </div>
-
-                            </form>
-                            <div class="row pb-3">
+                                <div class="row pb-3">
                                     <div class="col d-grid">
                                         <a class="btn btn-success btn-lg" href="{{ object.get_add_to_cart_url }}">Add To Cart
                                         </a>
                                     </div>
-                            </div>
-
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>

@@ -13,6 +13,7 @@ def update_category(sender, instance, **kwargs):
         - Updates item count
     """
     items_m2m_qs = instance.items.all()
+    print(items_m2m_qs)
     img = items_m2m_qs.order_by('name').first().main_image
 
     sender.objects.filter(id=instance.id).update(image=img, number_of_items=instance.items.count())

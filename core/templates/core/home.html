@@ -33,7 +33,7 @@
         <div class="row">
             {% for category in featured_categories %}
             <div class="col-12 col-md-4 p-5 mt-3">
-                <a href="{% url 'core:shop' %}">
+                <a href="{% url 'core:shop' %}?category={{ category.name_lowercase }}">
                     {% if category.image %}
                     <img src="{{ category.image.url }}" class="rounded-circle img-thumbnail border">
                     {% endif %}
@@ -42,7 +42,7 @@
 
                 <!-- TODO: Url needs to automatically lead to selected category -->
 
-                <p class="text-center"><a class="btn btn-success" href="{% url 'core:shop' %}">Go Shop</a></p>
+                <p class="text-center"><a class="btn btn-success" href="{% url 'core:shop' %}?category={{ category.name_lowercase }}">Go Shop</a></p>
             </div>
             {% endfor %}
         </div>
