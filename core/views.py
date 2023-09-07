@@ -1,7 +1,6 @@
 from django.views.generic import ListView, DetailView, TemplateView
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
-from django.http import HttpResponse
 
 from .models import Item, ItemCategory, Cart, OrderedItem
 
@@ -15,7 +14,7 @@ class ShopView(ListView):
         str(category.name_lowercase) for category in ItemCategory.objects.all()
     ]
 
-    def _validate_sort_parameters(self, sort_params):
+    def _validate_sort_params(self, sort_params):
         validated_sort_params = dict()
         for key, value in sort_params.items():
             if value:
@@ -33,7 +32,7 @@ class ShopView(ListView):
         context = super().get_context_data(**kwargs)
 
         sort_params = self.get_sort_params()
-        sort_params = self._validate_sort_parameters(sort_params)
+        sort_params = self._validate_sort_params(sort_params)
 
         if sort_params:
             context['items'] = self.model.objects.filter(
@@ -60,6 +59,7 @@ class ItemDetailView(DetailView):
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         context = self.get_context_data(object=self.object)
+        print(f'detail request: ', request)
 
         return render(request, self.template_name, context)
 
@@ -110,14 +110,29 @@ class ProfileView(TemplateView):
     template_name = 'core/profile.html'
 
 
+def add_to_favourites(request, *args, **kwargs):
+    print(f'args: ', args)
+    print(f'kwargs: ', kwargs)
+    return redirect('core:shop')
+
+
 def add_to_cart(request, slug):
+    if not request.user.is_authenticated:
+        return redirect('account_login')
+
+    print(f'add-to-cart request: ', request.GET)
+
     item = get_object_or_404(Item, slug=slug)
     ordered_item, created = OrderedItem.objects.get_or_create(item=item, user=request.user, ordered=False)
     cart_qs = Cart.objects.filter(user=request.user, ordered=False)
+
     if cart_qs.exists():
         cart = cart_qs[0]
 
         if cart.items.filter(item__slug=item.slug).exists():
+            item.units_in_stock -= 1
+            item.save()
+
             ordered_item.quantity += 1
             ordered_item.save()
         else:
@@ -126,6 +141,8 @@ def add_to_cart(request, slug):
         ordered_date = timezone.now()
         cart = Cart.objects.create(user=request.user, ordered_date=ordered_date)
         cart.items.add(ordered_item)
+
+        item.units_in_stock -= 1
 
     return redirect('core:product', slug=slug)
 
@@ -139,10 +156,11 @@ def remove_from_cart(request, slug):
         cart = cart_qs[0]
         if cart.items.filter(item__slug=item.slug).exists():
             if ordered_item.quantity >= 2:
-                ordered_item.quantity -= 1
                 ordered_item.save()
             else:
                 cart.items.remove(ordered_item)
+
+            item.units_in_stock += 1
 
     return redirect('core:cart')
 

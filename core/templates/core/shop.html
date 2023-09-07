@@ -78,7 +78,7 @@
                                     <ul class="list-unstyled" id="item-card-menu">
                                         <!-- Add to favourites -->
                                         <li>
-                                            <a class="btn btn-success text-white" href="">
+                                            <a class="btn btn-success text-white" href="{% url 'core:add-to-favourites' slug=item.slug %}">
                                                 <i class="far fa-heart"></i>
                                             </a>
                                         </li>
