@@ -161,6 +161,7 @@ def remove_from_cart(request, slug):
         cart = cart_qs[0]
         if cart.items.filter(item__slug=item.slug).exists():
             if ordered_item.quantity >= 2:
+                ordered_item.quantity -= 1
                 ordered_item.save()
             else:
                 cart.items.remove(ordered_item)
