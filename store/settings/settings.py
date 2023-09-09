@@ -11,19 +11,22 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 import os
+
 from pathlib import Path
+from dotenv import load_dotenv
 
-try:
-    from .local import *
-except ImportError:
-    pass
+load_dotenv()
 
+SECRET_KEY = str(os.getenv('SECRET_KEY'))
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'grechagrecha.pythonanywhere.com',
+    'localhost'
+]
 
 # Application definition
 
@@ -41,6 +44,13 @@ INSTALLED_APPS = [
 
     'core.apps.CoreConfig'
 ]
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -74,7 +84,6 @@ WSGI_APPLICATION = 'store.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
 
 
 # Password validation

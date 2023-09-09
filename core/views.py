@@ -2,7 +2,7 @@ from django.views.generic import ListView, DetailView, TemplateView
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 
-from .models import Item, ItemCategory, Cart, OrderedItem
+from .models import Item, ItemCategory, Cart, OrderedItem, ItemAttribute
 
 
 class ShopView(ListView):
@@ -42,6 +42,8 @@ class ShopView(ListView):
             context['items'] = self.model.objects.all()
 
         context['item_categories'] = ItemCategory.objects.all()
+        context['item_attributes'] = ItemAttribute.objects.all()
+        context['screen_resolution_attr'] = ItemAttribute.objects.filter(name='Screen resolution')
         return context
 
     def get_queryset(self):
@@ -113,7 +115,10 @@ class ProfileView(TemplateView):
 def add_to_favourites(request, *args, **kwargs):
     print(f'args: ', args)
     print(f'kwargs: ', kwargs)
-    return redirect('core:shop')
+    response = redirect('core:shop')
+    response['category'] = f'?category={request.GET.get("category")}'
+    print(response)
+    return response
 
 
 def add_to_cart(request, slug):
@@ -156,6 +161,7 @@ def remove_from_cart(request, slug):
         cart = cart_qs[0]
         if cart.items.filter(item__slug=item.slug).exists():
             if ordered_item.quantity >= 2:
+                ordered_item.quantity -= 1
                 ordered_item.save()
             else:
                 cart.items.remove(ordered_item)

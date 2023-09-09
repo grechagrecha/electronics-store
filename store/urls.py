@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
 
-from store.settings.base import MEDIA_URL, MEDIA_ROOT, STATIC_URL, STATIC_ROOT
+from store.settings.settings import MEDIA_URL, MEDIA_ROOT, STATIC_URL, STATIC_ROOT
 
 app_name = 'store'
 

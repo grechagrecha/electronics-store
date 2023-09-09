@@ -18,7 +18,13 @@
 <body>
     {% include 'core/navbar.html' %}
 
-
+    <div>
+        <h1>
+            <a class="text-right text-decoration-none" href="{% url 'account_logout' %}">
+                Log out
+            </a>
+        </h1>
+    </div>
 
     {% include 'core/footer.html' %}
 </body>
