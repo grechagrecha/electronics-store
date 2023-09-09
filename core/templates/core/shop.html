@@ -5,30 +5,32 @@
 <head>
     <title>ExpensiveTrash.com</title>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
 
-    <link rel="apple-touch-icon" href="{% static 'core/img/apple-icon.png' %}">
-    <link rel="shortcut icon" type="image/x-icon" href="{% static 'core/img/favicon.ico' %}">
-    <link rel="stylesheet" href="{% static 'core/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'core/css/templatemo.css' %}">
-    <link rel="stylesheet" href="{% static 'core/css/custom.css' %}">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
-    <link rel="stylesheet" href="{% static 'core/css/fontawesome.min.css' %}">
+    <link href="{% static 'core/img/apple-icon.png' %}" rel="apple-touch-icon">
+    <link href="{% static 'core/img/favicon.ico' %}" rel="shortcut icon" type="image/x-icon">
+    <link href="{% static 'core/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'core/css/templatemo.css' %}" rel="stylesheet">
+    <link href="{% static 'core/css/custom.css' %}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap"
+          rel="stylesheet">
+    <link href="{% static 'core/css/fontawesome.min.css' %}" rel="stylesheet">
 </head>
 
 <body>
     {% include 'core/navbar.html' %}
 
     <!-- Modal -->
-    <div class="modal fade bg-white" id="templatemo_search" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade bg-white" id="templatemo_search"
+         role="dialog" tabindex="-1">
         <div class="modal-dialog modal-lg" role="document">
             <div class="w-100 pt-1 mb-5 text-right">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
             </div>
-            <form action="" method="get" class="modal-content modal-body border-0 p-0">
+            <form action="" class="modal-content modal-body border-0 p-0" method="get">
                 <div class="input-group mb-2">
-                    <input type="text" class="form-control" id="inputModalSearch" name="q" placeholder="Search ...">
-                    <button type="submit" class="input-group-text bg-success text-light">
+                    <input class="form-control" id="inputModalSearch" name="q" placeholder="Search ..." type="text">
+                    <button class="input-group-text bg-success text-light" type="submit">
                         <i class="fa fa-fw fa-search text-white"></i>
                     </button>
                 </div>
@@ -37,24 +39,55 @@
     </div>
 
 
-
     <!-- Start Content -->
     <div class="container py-5">
         <div class="row">
-
             <div class="col-lg-3">
                 <h1 class="h2 pb-4">Categories</h1>
                 <ul class="list-unstyled templatemo-accordion">
-                    <a class="collapsed d-flex justify-content-between h4 text-decoration-none" href="?category=all&page={{ page_obj.number }}">
+                    <a class="collapsed d-flex justify-content-between h4 text-decoration-none"
+                       href="?category=all&page={{ page_obj.number }}">
                         All
                     </a>
                     {% for category in item_categories %}
-                    <a class="collapsed d-flex justify-content-between h4 text-decoration-none" href="?category={{ category.name_lowercase }}&page={{ page_obj.number }}">
+                    <a class="collapsed d-flex justify-content-between h4 text-decoration-none"
+                       href="?category={{ category.name_lowercase }}&page={{ page_obj.number }}">
                         {{ category.name }}
                     </a>
                     {% endfor %}
                 </ul>
+
+                <h1 class="h2 pb-4">Attributes</h1>
+                <ul class="list-unstyled templatemo-accordion">
+                    <a class="collapsed d-flex justify-content-between h4 text-decoration-none"
+                       href="?category=all&page={{ page_obj.number }}">
+                        All
+                    </a>
+                </ul>
+                <div class="dropdown">
+                    <button aria-expanded="false"
+                            class="btn btn-success dropdown-toggle"
+                            data-bs-toggle="dropdown"
+                            id="multiSelectDropdown"
+                            type="button">
+                        Screen resolution
+                    </button>
+                    <ul aria-labelledby="multiSelectDropdown"
+                        class="dropdown-menu">
+                        {% for attribute in screen_resolution_attr %}
+                        <li>
+                            <label>
+                                <input type="checkbox"
+                                       value="">
+                                {{ attribute.value }}
+
+                            </label>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
+
 
             <div class="col-lg-9">
                 <div class="row">
@@ -78,19 +111,22 @@
                                     <ul class="list-unstyled" id="item-card-menu">
                                         <!-- Add to favourites -->
                                         <li>
-                                            <a class="btn btn-success text-white" href="{% url 'core:add-to-favourites' slug=item.slug %}">
+                                            <a class="btn btn-success text-white"
+                                               href="{% url 'core:add-to-favourites' slug=item.slug category=request.GET.get__category %}">
                                                 <i class="far fa-heart"></i>
                                             </a>
                                         </li>
                                         <!-- Go to the product page -->
                                         <li>
-                                            <a class="btn btn-success text-white mt-2" href="{% url 'core:product' slug=item.slug %}">
+                                            <a class="btn btn-success text-white mt-2"
+                                               href="{% url 'core:product' slug=item.slug %}">
                                                 <i class="far fa-eye"></i>
                                             </a>
                                         </li>
                                         <!-- Add to cart -->
                                         <li>
-                                            <a class="btn btn-success text-white mt-2" href="{% url 'core:add-to-cart' slug=item.slug %}">
+                                            <a class="btn btn-success text-white mt-2"
+                                               href="{% url 'core:add-to-cart' slug=item.slug %}">
                                                 <i class="fas fa-cart-plus"></i>
                                             </a>
                                         </li>
@@ -98,7 +134,7 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <a href="" class="h3 text-decoration-none">{{ item.name }}</a>
+                                <a class="h3 text-decoration-none" href="">{{ item.name }}</a>
                                 <p class="text-center mb-0">${{ item.price }}</p>
                             </div>
                         </div>
