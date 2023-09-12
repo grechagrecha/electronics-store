@@ -1,8 +1,7 @@
 from django.views.generic import ListView, DetailView, TemplateView
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
-from django.urls import reverse
-from django.contrib.auth.models import User
+from django.http import HttpResponse
 
 from .models import Item, ItemCategory, Cart, OrderedItem, ItemAttribute
 
@@ -170,4 +169,5 @@ def remove_from_cart(request, slug):
 
 
 def order(request):
-    return NotImplemented
+    response = HttpResponse('Items have been ordered!')
+    return response
