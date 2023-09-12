@@ -25,6 +25,7 @@
                 <div class="card h-100">
                     <div class="card-body">
                         <ul class="list-unstyled d-flex justify-content-between">
+                            <img src="{{ ordered_item.item.main_image.url }}" class="rounded-circle img-thumbnail border">
                             <li class="text-green text-right" style="color:green">${{ ordered_item.item.price }}</li>
                             <li>
                                 <a class="btn btn-success text-white" href="{% url 'core:remove-from-cart' slug=ordered_item.item.slug %}">

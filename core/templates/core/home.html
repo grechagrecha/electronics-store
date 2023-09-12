@@ -39,9 +39,6 @@
                     {% endif %}
                 </a>
                 <h5 class="text-center mt-3 mb-3">{{ category.name }}</h5>
-
-                <!-- TODO: Url needs to automatically lead to selected category -->
-
                 <p class="text-center"><a class="btn btn-success" href="{% url 'core:shop' %}?category={{ category.name_lowercase }}">Go Shop</a></p>
             </div>
             {% endfor %}
