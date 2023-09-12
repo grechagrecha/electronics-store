@@ -1,6 +1,8 @@
 from django.views.generic import ListView, DetailView, TemplateView
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
+from django.urls import reverse
+from django.contrib.auth.models import User
 
 from .models import Item, ItemCategory, Cart, OrderedItem, ItemAttribute
 
@@ -44,6 +46,7 @@ class ShopView(ListView):
         context['item_categories'] = ItemCategory.objects.all()
         context['item_attributes'] = ItemAttribute.objects.all()
         context['screen_resolution_attr'] = ItemAttribute.objects.filter(name='Screen resolution')
+        context['refresh_rate_attr'] = ItemAttribute.objects.filter(name='Refresh rate')
         return context
 
     def get_queryset(self):
@@ -61,7 +64,6 @@ class ItemDetailView(DetailView):
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         context = self.get_context_data(object=self.object)
-        print(f'detail request: ', request)
 
         return render(request, self.template_name, context)
 
@@ -113,19 +115,15 @@ class ProfileView(TemplateView):
 
 
 def add_to_favourites(request, *args, **kwargs):
-    print(f'args: ', args)
-    print(f'kwargs: ', kwargs)
-    response = redirect('core:shop')
-    response['category'] = f'?category={request.GET.get("category")}'
-    print(response)
-    return response
+    http_referer_url = request.META['HTTP_REFERER']
+    return redirect(http_referer_url)
 
 
 def add_to_cart(request, slug):
     if not request.user.is_authenticated:
         return redirect('account_login')
-
-    print(f'add-to-cart request: ', request.GET)
+    
+    http_referer_url = request.META['HTTP_REFERER']
 
     item = get_object_or_404(Item, slug=slug)
     ordered_item, created = OrderedItem.objects.get_or_create(item=item, user=request.user, ordered=False)
@@ -149,7 +147,7 @@ def add_to_cart(request, slug):
 
         item.units_in_stock -= 1
 
-    return redirect('core:product', slug=slug)
+    return redirect(http_referer_url)
 
 
 def remove_from_cart(request, slug):

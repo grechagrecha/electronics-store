@@ -26,7 +26,7 @@ class Item(models.Model):
     attributes = models.ManyToManyField(ItemAttribute, blank=True)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
     def get_absolute_url(self):
         return reverse('core:product', kwargs={
@@ -65,10 +65,13 @@ class Cart(models.Model):
     ordered_date = models.DateTimeField(default=None)
 
     def __str__(self):
-        return f'user: {self.user} items: {self.items.all()} date: {self.ordered_date}'
+        return f'{self.user}\'s cart'
 
 
 class ItemCategory(models.Model):
+    class Meta:
+        verbose_name_plural = 'Item categories'
+
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=200, default='')
     name_lowercase = models.CharField(max_length=200, default='', blank=True)
@@ -81,4 +84,4 @@ class ItemCategory(models.Model):
 
     def save(self, *args, **kwargs):
         self.name_lowercase = str(self.name).lower()
-        super(ItemCategory, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)

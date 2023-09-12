@@ -15,6 +15,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap"
           rel="stylesheet">
     <link href="{% static 'core/css/fontawesome.min.css' %}" rel="stylesheet">
+    
+    <link href="{% static 'core/css/shop.css' %}" rel="stylesheet"
 </head>
 
 <body>
@@ -64,17 +66,41 @@
                         All
                     </a>
                 </ul>
+                <!-- Screen resolution dropdown selector -->
                 <div class="dropdown">
                     <button aria-expanded="false"
                             class="btn btn-success dropdown-toggle"
                             data-bs-toggle="dropdown"
-                            id="multiSelectDropdown"
+                            id="screen_resolution_dropdown"
                             type="button">
                         Screen resolution
                     </button>
                     <ul aria-labelledby="multiSelectDropdown"
                         class="dropdown-menu">
                         {% for attribute in screen_resolution_attr %}
+                        <li>
+                            <label>
+                                <input type="checkbox"
+                                       value="">
+                                {{ attribute.value }}
+
+                            </label>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <!-- Refresh rate dropdown selector -->
+                <div class="dropdown">
+                    <button aria-expanded="false"
+                            class="btn btn-success dropdown-toggle"
+                            data-bs-toggle="dropdown"
+                            id="refresh_rate_dropdown"
+                            type="button">
+                        Refresh rate
+                    </button>
+                    <ul aria-labelledby="multiSelectDropdown"
+                        class="dropdown-menu">
+                        {% for attribute in refresh_rate_attr %}
                         <li>
                             <label>
                                 <input type="checkbox"
@@ -112,7 +138,8 @@
                                         <!-- Add to favourites -->
                                         <li>
                                             <a class="btn btn-success text-white"
-                                               href="{% url 'core:add-to-favourites' slug=item.slug category=request.GET.get__category %}">
+
+                                               href="{% url 'core:add-to-favourites' slug=item.slug %}">
                                                 <i class="far fa-heart"></i>
                                             </a>
                                         </li>
