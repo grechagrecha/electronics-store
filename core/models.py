@@ -4,14 +4,21 @@ from django.utils.text import slugify
 from django.conf import settings
 
 
-class ItemAttributeValue(models.Model):
+class BaseModel(models.Model):
+    objects = models.Manager()
+
+    class Meta:
+        abstract = True
+
+
+class ItemAttributeValue(BaseModel):
     value = models.CharField(max_length=200)
 
     def __str__(self):
         return self.value
 
 
-class ItemAttribute(models.Model):
+class ItemAttribute(BaseModel):
     name = models.CharField(max_length=200)
     values = models.ManyToManyField(ItemAttributeValue)
 
@@ -19,7 +26,7 @@ class ItemAttribute(models.Model):
         return self.name
 
 
-class Item(models.Model):
+class Item(BaseModel):
     objects = models.Manager()
 
     id = models.BigAutoField(primary_key=True)
@@ -55,7 +62,7 @@ class Item(models.Model):
         super(Item, self).save(*args, **kwargs)
 
 
-class OrderedItem(models.Model):
+class OrderedItem(BaseModel):
     id = models.BigAutoField(primary_key=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     ordered = models.BooleanField(default=False)
@@ -66,7 +73,7 @@ class OrderedItem(models.Model):
         return f'{self.quantity} of {self.item.name}'
 
 
-class Cart(models.Model):
+class Cart(BaseModel):
     id = models.BigAutoField(primary_key=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     items = models.ManyToManyField(OrderedItem)
@@ -77,7 +84,7 @@ class Cart(models.Model):
         return f'{self.user}\'s cart'
 
 
-class ItemCategory(models.Model):
+class ItemCategory(BaseModel):
     class Meta:
         verbose_name_plural = 'Item categories'
 
