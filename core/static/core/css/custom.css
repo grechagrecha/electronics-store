@@ -12,3 +12,20 @@ Custom Css
     font-weight: 400 !important;
     text-decoration: none !important;
 }
+
+.disabled-button {
+    color: red;
+
+}
+
+.disabled-button:hover {
+    color: red;
+}
+
+
+
+.order-status {
+    margin: auto auto;
+    text-decoration: none;
+    
+}
