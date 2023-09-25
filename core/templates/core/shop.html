@@ -12,11 +12,10 @@
     <link href="{% static 'core/css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'core/css/templatemo.css' %}" rel="stylesheet">
     <link href="{% static 'core/css/custom.css' %}" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap"
-          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap" rel="stylesheet">
     <link href="{% static 'core/css/fontawesome.min.css' %}" rel="stylesheet">
     
-    <link href="{% static 'core/css/shop.css' %}" rel="stylesheet"
+    <link href="{% static 'core/css/shop.css' %}" rel="stylesheet">
 </head>
 
 <body>
@@ -53,7 +52,7 @@
                     </a>
                     {% for category in item_categories %}
                     <a class="collapsed d-flex justify-content-between h4 text-decoration-none"
-                       href="?category={{ category.name_lowercase }}&page={{ page_obj.number }}">
+                       href="?category={{ category.name_lowercase }}&page=1">
                         {{ category.name }}
                     </a>
                     {% endfor %}
@@ -66,52 +65,63 @@
                         All
                     </a>
                 </ul>
-                <!-- Screen resolution dropdown selector -->
-                <div class="dropdown">
-                    <button aria-expanded="false"
-                            class="btn btn-success dropdown-toggle"
-                            data-bs-toggle="dropdown"
-                            id="screen_resolution_dropdown"
-                            type="button">
-                        Screen resolution
-                    </button>
-                    <ul aria-labelledby="multiSelectDropdown"
-                        class="dropdown-menu">
-                        {% for attribute in screen_resolution_attr %}
-                        <li>
-                            <label>
-                                <input type="checkbox"
-                                       value="">
-                                {{ attribute.value }}
+                <form action="{% url 'core:shop' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="attribute-selector">
+                        <!-- Screen resolution dropdown selector -->
+                        <div class="dropdown">
+                            <button aria-expanded="false"
+                                    class="btn btn-success dropdown-toggle"
+                                    data-bs-toggle="dropdown"
+                                    id="screen_resolution_dropdown"
+                                    type="button">
+                                Screen resolution
+                            </button>
+                            <ul aria-labelledby="multiSelectDropdown"
+                                class="dropdown-menu">
+                                {% for attribute in screen_resolution_attr.values %}
+                                    {% for value in attribute %}
+                                    <li>
+                                        <label>
+                                            <input type="checkbox"
+                                                value="{{ attribute.value }}"
+                                                name="screen_resolution_checkbox">
+                                            {{ value.value }}
 
-                            </label>
-                        </li>
-                        {% endfor %}
-                    </ul>
+                                        </label>
+                                    </li>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <!-- Refresh rate dropdown selector -->
+                        <div class="dropdown">
+                            <button aria-expanded="false"
+                                    class="btn btn-success dropdown-toggle"
+                                    data-bs-toggle="dropdown"
+                                    id="refresh_rate_dropdown"
+                                    type="button">
+                                Refresh rate
+                            </button>
+                            <ul aria-labelledby="multiSelectDropdown"
+                                class="dropdown-menu">
+                                {% for attribute in refresh_rate_attr %}
+                                <li>
+                                    <label>
+                                        <input type="checkbox"
+                                            value="{{ attribute.value }}"
+                                            name="refresh_rate_checkbox">
+                                            {{ attribute.value }}
+                                    </label>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                <div>
+                    <button type="submit">Apply filters</button>
                 </div>
-                <!-- Refresh rate dropdown selector -->
-                <div class="dropdown">
-                    <button aria-expanded="false"
-                            class="btn btn-success dropdown-toggle"
-                            data-bs-toggle="dropdown"
-                            id="refresh_rate_dropdown"
-                            type="button">
-                        Refresh rate
-                    </button>
-                    <ul aria-labelledby="multiSelectDropdown"
-                        class="dropdown-menu">
-                        {% for attribute in refresh_rate_attr %}
-                        <li>
-                            <label>
-                                <input type="checkbox"
-                                       value="">
-                                {{ attribute.value }}
-
-                            </label>
-                        </li>
-                        {% endfor %}
-                    </ul>
-                </div>
+                </form>
             </div>
 
 

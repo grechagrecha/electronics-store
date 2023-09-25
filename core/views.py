@@ -1,58 +1,72 @@
 from django.views.generic import ListView, DetailView, TemplateView
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
-from django.http import HttpResponse
+from django.db.models import Q, QuerySet
 
-from .models import Item, ItemCategory, Cart, OrderedItem, ItemAttribute
+from .models import Item, ItemCategory, Cart, OrderedItem, ItemAttribute, ItemAttributeValue
 
 
 class ShopView(ListView):
     model = Item
     template_name = 'core/shop.html'
     paginate_by = 6
+    params_list = dict()
 
-    ITEM_CATEGORIES = [
-        str(category.name_lowercase) for category in ItemCategory.objects.all()
-    ]
+    def get_params_list(self):
+        params_list = dict()
 
-    def _validate_sort_params(self, sort_params):
-        validated_sort_params = dict()
-        for key, value in sort_params.items():
-            if value:
-                if key == 'category':
-                    if value in self.ITEM_CATEGORIES:
-                        validated_sort_params[key] = value
-        return validated_sort_params
+        params_list['page'] = self.request.GET.get('page', '1')
+        params_list['category'] = self.request.GET.get('category', None)
+        params_list['screen_resolution'] = self.request.GET.get('screen_resolution', None)
+        params_list['refresh_rate'] = self.request.GET.get('refresh_rate', None)
 
-    def get_sort_params(self):
-        return {
-            'category': self.request.GET.get('category')
-        }
+        return params_list
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        sort_params = self.get_sort_params()
-        sort_params = self._validate_sort_params(sort_params)
-
-        if sort_params:
-            context['items'] = self.model.objects.filter(
-                itemcategory__name_lowercase=sort_params.get('category')
-            )
-        else:
-            context['items'] = self.model.objects.all()
 
         context['item_categories'] = ItemCategory.objects.all()
         context['item_attributes'] = ItemAttribute.objects.all()
         context['screen_resolution_attr'] = ItemAttribute.objects.filter(name='Screen resolution')
         context['refresh_rate_attr'] = ItemAttribute.objects.filter(name='Refresh rate')
+        print(context['screen_resolution_attr'])
+
+
         return context
 
     def get_queryset(self):
-        qs_filter_category = self.request.GET.get('category', '')
-        if not qs_filter_category or qs_filter_category == 'all':
-            return self.model.objects.all().order_by('name')
-        return self.model.objects.filter(itemcategory__name_lowercase=qs_filter_category).order_by('name')
+        qs = self.model.objects.all()
+        params_list = self.get_params_list()
+
+        if not params_list['category'] or params_list['category'] == 'all':
+            return qs.order_by('name')
+
+        # TODO: Implement filtering
+        qs = qs.filter(itemcategory__name_lowercase=params_list['category'])
+
+        if params_list['screen_resolution']:
+            qs = qs.filter()
+
+
+        return qs.order_by('name')
+
+    def post(self, request):
+        referer = request.META['HTTP_REFERER']
+
+        refresh_rate_list = request.POST.getlist('refresh_rate_checkbox')
+        screen_resolution_list = request.POST.getlist('screen_resolution_checkbox')
+
+        refresh_rate_url = 'refresh_rate=' + '-'.join(refresh_rate_list)
+        screen_resolution_url = 'screen_resolution=' + '-'.join(screen_resolution_list)
+
+        attribute_url = [refresh_rate_url, screen_resolution_url]
+
+        print(attribute_url)
+
+        if 'shop?' in referer:
+            pass
+
+        return redirect(request.META['HTTP_REFERER'])
 
 
 class ItemDetailView(DetailView):
@@ -121,7 +135,7 @@ def add_to_favourites(request, *args, **kwargs):
 def add_to_cart(request, slug):
     if not request.user.is_authenticated:
         return redirect('account_login')
-    
+
     http_referer_url = request.META['HTTP_REFERER']
 
     item = get_object_or_404(Item, slug=slug)
@@ -169,5 +183,7 @@ def remove_from_cart(request, slug):
 
 
 def order(request):
-    response = HttpResponse('Items have been ordered!')
-    return response
+    order_status = True
+    return render(request, 'core/order.html', context={
+        'order_status': order_status
+    })

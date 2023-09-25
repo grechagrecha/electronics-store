@@ -4,15 +4,24 @@ from django.utils.text import slugify
 from django.conf import settings
 
 
-class ItemAttribute(models.Model):
-    name = models.CharField(max_length=200)
+class ItemAttributeValue(models.Model):
     value = models.CharField(max_length=200)
 
     def __str__(self):
-        return f'{self.name}: {self.value}'
+        return self.value
+
+
+class ItemAttribute(models.Model):
+    name = models.CharField(max_length=200)
+    values = models.ManyToManyField(ItemAttributeValue)
+
+    def __str__(self):
+        return self.name
 
 
 class Item(models.Model):
+    objects = models.Manager()
+
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)

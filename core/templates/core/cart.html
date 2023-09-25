@@ -44,9 +44,12 @@
     {% endfor %}
 
     <div>
+        {% if items %}
         <a href="{% url 'core:order' %}" class="order-button">Order</a>
+        {% else %}
+        <p class="order-button disabled-button">Order</p>
+        {% endif %}
     </div>
-
     {% include 'core/footer.html' %}
 </body>
 </html>
