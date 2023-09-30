@@ -29,8 +29,6 @@ class ShopView(ListView):
         context['item_attributes'] = ItemAttribute.objects.all()
         context['screen_resolution_attr'] = ItemAttribute.objects.filter(name='Screen resolution')
         context['refresh_rate_attr'] = ItemAttribute.objects.filter(name='Refresh rate')
-        print(context['screen_resolution_attr'])
-
 
         return context
 
@@ -45,8 +43,9 @@ class ShopView(ListView):
         qs = qs.filter(itemcategory__name_lowercase=params_list['category'])
 
         if params_list['screen_resolution']:
-            qs = qs.filter()
-
+            print(qs.filter())
+            qs = qs.filter(attributes__name__in=['screen_resolution'])
+            print(qs)
 
         return qs.order_by('name')
 
@@ -60,8 +59,6 @@ class ShopView(ListView):
         screen_resolution_url = 'screen_resolution=' + '-'.join(screen_resolution_list)
 
         attribute_url = [refresh_rate_url, screen_resolution_url]
-
-        print(attribute_url)
 
         if 'shop?' in referer:
             pass

@@ -30,20 +30,27 @@ ALLOWED_HOSTS = [
 
 # Application definition
 
-INSTALLED_APPS = [
+DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+]
 
+CUSTOM_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'eav',
+]
 
+ADDITIONAL_APPS = [
     'core.apps.CoreConfig'
 ]
+
+INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS + ADDITIONAL_APPS
 
 DATABASES = {
     'default': {
