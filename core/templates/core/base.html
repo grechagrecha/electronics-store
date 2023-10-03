@@ -1,10 +1,10 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>ExpensiveTrash.com</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <title>{% block title %}Profile{% endblock %}</title>
 
     <link rel="apple-touch-icon" href="{% static 'core/img/apple-icon.png' %}">
     <link rel="shortcut icon" type="image/x-icon" href="{% static 'core/img/favicon.ico' %}">
@@ -18,13 +18,9 @@
 <body>
     {% include 'core/navbar.html' %}
 
-    <div>
-        <h1>
-            <a class="text-right text-decoration-none" href="{% url 'account_logout' %}">
-                Log out
-            </a>
-        </h1>
-    </div>
+    {% block content %}
+
+    {% endblock %}
 
     {% include 'core/footer.html' %}
 </body>

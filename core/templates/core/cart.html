@@ -1,55 +1,41 @@
+{% extends 'core/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>ExpensiveTrash.com</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+{% block content %}
 
-    <link rel="apple-touch-icon" href="{% static 'core/img/apple-icon.png' %}">
-    <link rel="shortcut icon" type="image/x-icon" href="{% static 'core/img/favicon.ico' %}">
+{% for ordered_item in items %}
+<section class="container py-5" style="padding-top: 0.5rem!important;padding-bottom: 0 !important">
+    <div class="row">
+        <div class="col-12 col-md-4 mb-4" style="margin-bottom: 0.5rem!important;">
+            <div class="card h-100">
+                <div class="card-body">
+                    <ul class="list-unstyled d-flex justify-content-between">
+                        <img class="rounded-circle img-thumbnail border" src="{{ ordered_item.item.main_image.url }}">
+                        <li class="text-green text-right" style="color:green">${{ ordered_item.item.price }}</li>
+                        <li>
+                            <a class="btn btn-success text-white"
+                               href="{% url 'core:remove-from-cart' slug=ordered_item.item.slug %}">
+                                <i>X</i>
+                            </a>
+                        </li>
 
-    <link rel="stylesheet" href="{% static 'core/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'core/css/templatemo.css' %}">
-    <link rel="stylesheet" href="{% static 'core/css/custom.css' %}">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
-    <link rel="stylesheet" href="{% static 'core/css/fontawesome.min.css' %}">
-</head>
-<body>
-    {% include 'core/navbar.html' %}
-
-    {% for ordered_item in items %}
-    <section class="container py-5" style="padding-top: 0.5rem!important;padding-bottom: 0 !important">
-        <div class="row">
-            <div class="col-12 col-md-4 mb-4" style="margin-bottom: 0.5rem!important;">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <ul class="list-unstyled d-flex justify-content-between">
-                            <img src="{{ ordered_item.item.main_image.url }}" class="rounded-circle img-thumbnail border">
-                            <li class="text-green text-right" style="color:green">${{ ordered_item.item.price }}</li>
-                            <li>
-                                <a class="btn btn-success text-white" href="{% url 'core:remove-from-cart' slug=ordered_item.item.slug %}">
-                                        <i>X</i>
-                                </a>
-                            </li>
-
-                        </ul>
-                        <a style="font-weight: 400 !important; text-decoration: none;" href="{% url 'core:product' slug=ordered_item.item.slug %}">{{ ordered_item.item.name }}</a>
-                        <a class="text-green text-right" style="color:red; margin-left: auto; margin-right: 0; text-decoration:none;">x{{ ordered_item.quantity }}</a>
-                    </div>
+                    </ul>
+                    <a href="{% url 'core:product' slug=ordered_item.item.slug %}"
+                       style="font-weight: 400 !important; text-decoration: none;">{{ ordered_item.item.name }}</a>
+                    <a class="text-green text-right"
+                       style="color:red; margin-left: auto; margin-right: 0; text-decoration:none;">x{{
+                        ordered_item.quantity }}</a>
                 </div>
             </div>
         </div>
-    </section>
-    {% endfor %}
-
-    <div>
-        {% if items %}
-        <a href="{% url 'core:order' %}" class="order-button">Order</a>
-        {% else %}
-        <p class="order-button disabled-button">Order</p>
-        {% endif %}
     </div>
-    {% include 'core/footer.html' %}
-</body>
-</html>
+</section>
+{% endfor %}
+
+<div>
+    {% if items %}
+    <a class="order-button" href="{% url 'core:order' %}">Order</a>
+    {% else %}
+    <p class="order-button disabled-button">Order</p>
+    {% endif %}
+</div>
+{% endblock %}

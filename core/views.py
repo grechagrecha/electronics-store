@@ -119,11 +119,6 @@ class CartView(ListView):
         return context
 
 
-class ProfileView(TemplateView):
-    model = Cart
-    template_name = 'core/profile.html'
-
-
 def add_to_favourites(request, *args, **kwargs):
     http_referer_url = request.META['HTTP_REFERER']
     return redirect(http_referer_url)

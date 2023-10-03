@@ -11,7 +11,6 @@ urlpatterns = [
     path('about', views.AboutView.as_view(), name='about'),
     path('contact', views.ContactView.as_view(), name='contact'),
     path('cart', views.CartView.as_view(), name='cart'),
-    path('profile', views.ProfileView.as_view(), name='profile'),
     path('add-to-favourites/<slug:slug>', views.add_to_favourites, name='add-to-favourites'),
     path('add-to-cart/<slug:slug>', views.add_to_cart, name='add-to-cart'),
     path('remove-from-cart/<slug>', views.remove_from_cart, name='remove-from-cart'),
