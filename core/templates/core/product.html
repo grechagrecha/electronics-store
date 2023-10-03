@@ -1,139 +1,90 @@
+{% extends 'core/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <title>ExpensiveTrash.com - Product Detail Page</title>
-    <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1" name="viewport">
-
-    <link href="{% static 'core/img/apple-icon.png' %}" rel="apple-touch-icon">
-    <link href="{% static 'core/img/favicon.ico' %}" rel="shortcut icon" type="image/x-icon">
-
-    <link href="{% static 'core/css/bootstrap.min.css' %}" rel="stylesheet">
-    <link href="{% static 'core/css/templatemo.css' %}" rel="stylesheet">
-    <link href="{% static 'core/css/custom.css' %}" rel="stylesheet">
-
-    <!-- Load fonts style after rendering the layout styles -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap"
-          rel="stylesheet">
-    <link href="{% static 'core/css/fontawesome.min.css' %}" rel="stylesheet">
-
-    <!-- Slick -->
-    <link href="{% static 'core/css/slick.min.css' %}" rel="stylesheet" type="text/css">
-    <link href="{% static 'core/css/slick-theme.css' %}" rel="stylesheet" type="text/css">
-    <!--
-
-    TemplateMo 559 Zay Shop
-
-    https://templatemo.com/tm-559-zay-shop
-
-    -->
-</head>
-
-<body>
-    {% include 'core/navbar.html' %}
-
-    {% block content %}
-
-    {% endblock %}
-
-    <!-- Modal -->
-    <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade bg-white" id="templatemo_search"
-         role="dialog" tabindex="-1">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="w-100 pt-1 mb-5 text-right">
-                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+{% block content %}
+<!-- Modal -->
+<div aria-hidden="true"
+     aria-labelledby="exampleModalLabel"
+     class="modal fade bg-white"
+     id="templatemo_search"
+     role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="w-100 pt-1 mb-5 text-right">
+            <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+        </div>
+        <form action="" class="modal-content modal-body border-0 p-0" method="get">
+            <div class="input-group mb-2">
+                <input class="form-control" id="inputModalSearch" name="q" placeholder="Search ..." type="text">
+                <button class="input-group-text bg-success text-light" type="submit">
+                    <i class="fa fa-fw fa-search text-white"></i>
+                </button>
             </div>
-            <form action="" class="modal-content modal-body border-0 p-0" method="get">
-                <div class="input-group mb-2">
-                    <input class="form-control" id="inputModalSearch" name="q" placeholder="Search ..." type="text">
-                    <button class="input-group-text bg-success text-light" type="submit">
-                        <i class="fa fa-fw fa-search text-white"></i>
-                    </button>
+        </form>
+    </div>
+</div>
+
+
+<!-- Open Content -->
+<section class="bg-light">
+    <div class="container pb-5">
+        <div class="row">
+            <div class="col-lg-5 mt-5">
+                <div class="card mb-3">
+                    <img alt="Card image cap" class="card-img img-fluid"
+                         id="product-detail" src="{{ item.main_image.url }}">
                 </div>
-            </form>
+            </div>
+            <!-- col end -->
+            <div class="col-lg-7 mt-5">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="h2">{{ item.name }}</h1>
+                        <p class="h3 py-2" style="color: green;">{{ item.price }}$</p>
+                        <h6>Description:</h6>
+                        {% if item.description %}
+                        <p>{{ item.description }}</p>
+                        {% else %}
+                        <p>Here should have been item's description, but it seems it has been lost.</p>
+                        {% endif %}
+                        <h6>Specification:</h6>
+                        <ul class="list-unstyled pb-3">
+                            {% for attribute in item.attributes.all %}
+                            <li>{{ attribute }}</li>
+                            {% endfor %}
+                        </ul>
+
+                        <form action="." method="POST">
+                            <input name="product-title" type="hidden" value="Activewear">
+                            <div class="row">
+                                <div class="col-auto">
+                                    <ul class="list-inline pb-3">
+                                        <li class="list-inline-item text-right">
+                                            Quantity
+                                            <input id="product-quanity" name="product-quanity" type="hidden"
+                                                   value="1">
+                                        </li>
+                                        <li class="list-inline-item"><span class="btn btn-success"
+                                                                           id="btn-minus">-</span></li>
+                                        <li class="list-inline-item"><span class="badge bg-secondary"
+                                                                           id="var-value">1</span></li>
+                                        <li class="list-inline-item"><span class="btn btn-success"
+                                                                           id="btn-plus">+</span></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="row pb-3">
+                                <div class="col d-grid">
+                                    <a class="btn btn-success btn-lg" href="{{ object.get_add_to_cart_url }}">Add To
+                                        Cart
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+</section>
+<!-- Close Content -->
 
-
-    <!-- Open Content -->
-    <section class="bg-light">
-        <div class="container pb-5">
-            <div class="row">
-                <div class="col-lg-5 mt-5">
-                    <div class="card mb-3">
-                        <img alt="Card image cap" class="card-img img-fluid"
-                             id="product-detail" src="{{ item.main_image.url }}">
-                    </div>
-                </div>
-                <!-- col end -->
-                <div class="col-lg-7 mt-5">
-                    <div class="card">
-                        <div class="card-body">
-                            <h1 class="h2">{{ item.name }}</h1>
-                            <p class="h3 py-2" style="color: green;">{{ item.price }}$</p>
-                            <h6>Description:</h6>
-                            {% if item.description %}
-                            <p>{{ item.description }}</p>
-                            {% else %}
-                            <p>Here should have been item's description, but it seems it has been lost.</p>
-                            {% endif %}
-                            <h6>Specification:</h6>
-                            <ul class="list-unstyled pb-3">
-                                {% for attribute in item.attributes.all %}
-                                <li>{{ attribute }}</li>
-                                {% endfor %}
-                            </ul>
-
-                            <form action="." method="POST">
-                                <input name="product-title" type="hidden" value="Activewear">
-                                <div class="row">
-                                    <div class="col-auto">
-                                        <ul class="list-inline pb-3">
-                                            <li class="list-inline-item text-right">
-                                                Quantity
-                                                <input id="product-quanity" name="product-quanity" type="hidden"
-                                                       value="1">
-                                            </li>
-                                            <li class="list-inline-item"><span class="btn btn-success"
-                                                                               id="btn-minus">-</span></li>
-                                            <li class="list-inline-item"><span class="badge bg-secondary"
-                                                                               id="var-value">1</span></li>
-                                            <li class="list-inline-item"><span class="btn btn-success"
-                                                                               id="btn-plus">+</span></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="row pb-3">
-                                    <div class="col d-grid">
-                                        <a class="btn btn-success btn-lg" href="{{ object.get_add_to_cart_url }}">Add To Cart
-                                        </a>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Close Content -->
-
-    {% include 'core/footer.html' %}
-
-    <!-- Start Script -->
-    <script src="{% static 'core/js/jquery-1.11.0.min.js' %}"></script>
-    <script src="{% static 'core/js/jquery-migrate-1.2.1.min.js' %}"></script>
-    <script src="{% static 'core/js/bootstrap.bundle.min.js' %}"></script>
-    <script src="{% static 'core/js/templatemo.js' %}"></script>
-    <script src="{% static 'core/js/custom.js' %}"></script>
-    <!-- End Script -->
-
-    <!-- Start Slider Script -->
-    <script src="{% static 'core/js/slick.min.js' %}"></script>
-    <!-- End Slider Script -->
-
-</body>
-
-</html>
+{% endblock %}

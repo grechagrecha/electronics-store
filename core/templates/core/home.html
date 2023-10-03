@@ -1,94 +1,69 @@
+{% extends 'core/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
+{% block content %}
 
-<head>
-    <title>ExpensiveTrash.com</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Start Categories of The Month -->
+<section class="container py-5">
+    <div class="row text-center pt-3">
+        <div class="col-lg-6 m-auto">
+            <h1 class="h1">Categories of The Month</h1>
+            <p>
+                Check these out!
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        {% for category in featured_categories %}
+        <div class="col-12 col-md-4 p-5 mt-3">
+            <a href="{% url 'core:shop' %}?category={{ category.name_lowercase }}">
+                {% if category.image %}
+                <img class="rounded-circle img-thumbnail border" src="{{ category.image.url }}">
+                {% endif %}
+            </a>
+            <h5 class="text-center mt-3 mb-3">{{ category.name }}</h5>
+            <p class="text-center"><a class="btn btn-success"
+                                      href="{% url 'core:shop' %}?category={{ category.name_lowercase }}">Go Shop</a>
+            </p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+<!-- End Categories of The Month -->
 
-    <link rel="apple-touch-icon" href="{% static 'core/img/apple-icon.png' %}">
-    <link rel="shortcut icon" type="image/x-icon" href="{% static 'core/img/favicon.ico' %}">
 
-    <link rel="stylesheet" href="{% static 'core/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'core/css/templatemo.css' %}">
-    <link rel="stylesheet" href="{% static 'core/css/custom.css' %}">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
-    <link rel="stylesheet" href="{% static 'core/css/fontawesome.min.css' %}">
-</head>
-
-<body>
-    {% include 'core/navbar.html' %}
-
-    <!-- Start Categories of The Month -->
-    <section class="container py-5">
-        <div class="row text-center pt-3">
+<!-- Start Featured Product -->
+<section class="bg-light">
+    <div class="container py-5">
+        <div class="row text-center py-3">
             <div class="col-lg-6 m-auto">
-                <h1 class="h1">Categories of The Month</h1>
-                <p>
-                    Check these out!
-                </p>
+                <h1 class="h1">Featured Products</h1>
             </div>
         </div>
         <div class="row">
-            {% for category in featured_categories %}
-            <div class="col-12 col-md-4 p-5 mt-3">
-                <a href="{% url 'core:shop' %}?category={{ category.name_lowercase }}">
-                    {% if category.image %}
-                    <img src="{{ category.image.url }}" class="rounded-circle img-thumbnail border">
-                    {% endif %}
-                </a>
-                <h5 class="text-center mt-3 mb-3">{{ category.name }}</h5>
-                <p class="text-center"><a class="btn btn-success" href="{% url 'core:shop' %}?category={{ category.name_lowercase }}">Go Shop</a></p>
+            {% for item in featured_products %}
+            <div class="col-12 col-md-4 mb-4">
+                <div class="card h-100">
+                    <a href="{% url 'core:product' slug=item.slug %}">
+                        <img alt="..." class="card-img-top" src="{{ item.main_image.url }}">
+                    </a>
+                    <div class="card-body">
+                        <ul class="list-unstyled d-flex justify-content-between">
+                            <li class="text-green text-right">${{ item.price }}</li>
+                        </ul>
+                        <a class="h2 text-decoration-none text-dark"
+                           href="{% url 'core:product' slug=item.slug %}">
+                            {{ item.name }}
+                        </a>
+                        <p class="card-text">
+                            {{ item.description }}
+                        </p>
+                        <p class="text-muted"></p>
+                    </div>
+                </div>
             </div>
             {% endfor %}
         </div>
-    </section>
-    <!-- End Categories of The Month -->
-
-
-    <!-- Start Featured Product -->
-    <section class="bg-light">
-        <div class="container py-5">
-            <div class="row text-center py-3">
-                <div class="col-lg-6 m-auto">
-                    <h1 class="h1">Featured Products</h1>
-                </div>
-            </div>
-            <div class="row">
-                {% for item in featured_products %}
-                <div class="col-12 col-md-4 mb-4">
-                    <div class="card h-100">
-                        <a href="{% url 'core:product' slug=item.slug %}">
-                            <img src="{{ item.main_image.url }}" class="card-img-top" alt="...">
-                        </a>
-                        <div class="card-body">
-                            <ul class="list-unstyled d-flex justify-content-between">
-                                <li class="text-green text-right">${{ item.price }}</li>
-                            </ul>
-                            <a href="{% url 'core:product' slug=item.slug %}" class="h2 text-decoration-none text-dark">{{ item.name }}</a>
-                            <p class="card-text">
-                                {{ item.description }}
-                            </p>
-                            <p class="text-muted"></p>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-    </section>
-    <!-- End Featured Product -->
-
-    {% include 'core/footer.html' %}
-
-    <!-- Start Script -->
-    <script src="{% static 'core/js/jquery-1.11.0.min.js' %}"></script>
-    <script src="{% static 'core/js/jquery-migrate-1.2.1.min.js' %}"></script>
-    <script src="{% static 'core/js/bootstrap.bundle.min.js' %}"></script>
-    <script src="{% static 'core/js/templatemo.js' %}"></script>
-    <script src="{% static 'core/js/custom.js' %}"></script>
-    <!-- End Script -->
-</body>
-
-</html>
+    </div>
+</section>
+<!-- End Featured Product -->
+{% endblock %}
