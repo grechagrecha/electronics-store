@@ -1,3 +1,31 @@
 /*
 Custom Css
 */
+
+.order-button {
+    margin: 0 auto;
+    padding-left: 5rem;
+    text-align: center !important;
+
+    font-family: 'Roboto', sans-serif;
+    font-size: 32px !important;
+    font-weight: 400 !important;
+    text-decoration: none !important;
+}
+
+.disabled-button {
+    color: red;
+
+}
+
+.disabled-button:hover {
+    color: red;
+}
+
+
+
+.order-status {
+    margin: auto auto;
+    text-decoration: none;
+    
+}
