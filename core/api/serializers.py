@@ -4,4 +4,6 @@ from ..models import Item
 
 
 class ItemSerializer(ModelSerializer):
-    pass
+    class Meta:
+        model = Item
+        fields = '__all__'

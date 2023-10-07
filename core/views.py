@@ -25,7 +25,7 @@ class ShopView(ListView):
         queryset = super().get_queryset()
         self.filterset = ItemFilter(self.request.GET, queryset=queryset)
 
-        return self.filterset.qs
+        return self.filterset.qs.order_by('name')
 
 
 class ItemDetailView(DetailView):

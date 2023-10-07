@@ -31,7 +31,8 @@ DJANGO_APPS = [
 CUSTOM_APPS = [
     'eav',
     'django_filters',
-    'crispy_forms'
+    'crispy_forms',
+    'rest_framework'
 ]
 
 PROJECT_APPS = [

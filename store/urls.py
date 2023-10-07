@@ -10,7 +10,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('core.urls')),
     path('accounts/', include('accounts.urls')),
-
 ]
 
 urlpatterns += static(STATIC_URL, document_root=STATIC_ROOT)
