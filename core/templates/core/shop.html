@@ -33,7 +33,7 @@
                     {{ filter_form }}
 
                     <button class="btn btn-success" type="submit" value="Submit">Apply filters</button>
-                    <button class="btn btn-danger mt-1" type="submit" value="{% url 'core:shop' %}">
+                    <button class="btn btn-danger mt-1" type="submit" value="/shop">
                         Clear filters
                     </button>
                 </form>
@@ -54,7 +54,7 @@
                 </div>
             </div>
             <div class="row">
-                {% for item in filtered_items %}
+                {% for item in items %}
                 <!-- Item -->
                 <div class="col-md-4">
                     <div class="card mb-4 product-wap rounded-0">

@@ -9,52 +9,23 @@ from .filters import ItemFilter
 
 class ShopView(ListView):
     model = Item
+    queryset = model.objects.all()
     template_name = 'core/shop.html'
+    context_object_name = 'items'
     paginate_by = 6
-    params_list = dict()
 
-    def get_params_list(self):
-        params_list = dict()
-
-        params_list['page'] = self.request.GET.get('page', '1')
-        params_list['category'] = self.request.GET.get('category', None)
-        params_list['screen_resolution'] = self.request.GET.get('screen_resolution', None)
-        params_list['refresh_rate'] = self.request.GET.get('refresh_rate', None)
-
-        return params_list
+    filterset = None
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        item_filter = ItemFilter(self.request.GET, queryset=Item.objects.all())
-
-        context['item_categories'] = ItemCategory.objects.all()
-        context['item_attributes'] = ItemAttribute.objects.all()
-        context['screen_resolution_attr'] = ItemAttribute.objects.filter(name='Screen resolution')
-        context['refresh_rate_attr'] = ItemAttribute.objects.filter(name='Refresh rate')
-
-        context['filtered_items'] = item_filter.qs
-        context['filter_form'] = item_filter.form
-
+        context['filter_form'] = self.filterset.form
         return context
 
     def get_queryset(self):
-        qs = self.model.objects.all()
-        params_list = self.get_params_list()
+        queryset = super().get_queryset()
+        self.filterset = ItemFilter(self.request.GET, queryset=queryset)
 
-        if not params_list['category'] or params_list['category'] == 'all':
-            return qs.order_by('name')
-
-        # TODO: Implement filtering
-        qs = qs.filter(itemcategory__name_lowercase=params_list['category'])
-
-        if params_list['screen_resolution']:
-            print(qs.filter())
-            qs = qs.filter(attributes__name__in=['screen_resolution'])
-            print(qs)
-
-        return qs.order_by('name')
-
+        return self.filterset.qs
 
 
 class ItemDetailView(DetailView):
