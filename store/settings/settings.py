@@ -30,14 +30,16 @@ DJANGO_APPS = [
 
 CUSTOM_APPS = [
     'eav',
+    'django_filters',
+    'crispy_forms'
 ]
 
-ADDITIONAL_APPS = [
+PROJECT_APPS = [
     'core.apps.CoreConfig',
     'accounts.apps.AccountsConfig'
 ]
 
-INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS + ADDITIONAL_APPS
+INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS + PROJECT_APPS
 
 DATABASES = {
     'default': {

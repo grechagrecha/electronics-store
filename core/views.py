@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.db.models import Q, QuerySet
 
 from .models import Item, ItemCategory, Cart, OrderedItem, ItemAttribute, ItemAttributeValue
+from .filters import ItemFilter
 
 
 class ShopView(ListView):
@@ -25,10 +26,15 @@ class ShopView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        item_filter = ItemFilter(self.request.GET, queryset=Item.objects.all())
+
         context['item_categories'] = ItemCategory.objects.all()
         context['item_attributes'] = ItemAttribute.objects.all()
         context['screen_resolution_attr'] = ItemAttribute.objects.filter(name='Screen resolution')
         context['refresh_rate_attr'] = ItemAttribute.objects.filter(name='Refresh rate')
+
+        context['filtered_items'] = item_filter.qs
+        context['filter_form'] = item_filter.form
 
         return context
 
@@ -49,21 +55,6 @@ class ShopView(ListView):
 
         return qs.order_by('name')
 
-    def post(self, request):
-        referer = request.META['HTTP_REFERER']
-
-        refresh_rate_list = request.POST.getlist('refresh_rate_checkbox')
-        screen_resolution_list = request.POST.getlist('screen_resolution_checkbox')
-
-        refresh_rate_url = 'refresh_rate=' + '-'.join(refresh_rate_list)
-        screen_resolution_url = 'screen_resolution=' + '-'.join(screen_resolution_list)
-
-        attribute_url = [refresh_rate_url, screen_resolution_url]
-
-        if 'shop?' in referer:
-            pass
-
-        return redirect(request.META['HTTP_REFERER'])
 
 
 class ItemDetailView(DetailView):

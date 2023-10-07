@@ -8,7 +8,7 @@
         <div class="w-100 pt-1 mb-5 text-right">
             <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
         </div>
-        <form action="" class="modal-content modal-body border-0 p-0" method="get">
+        <form action="" class="modal-content modal-body border-0 p-0" method="GET">
             <div class="input-group mb-2">
                 <input class="form-control" id="inputModalSearch" name="q" placeholder="Search ..." type="text">
                 <button class="input-group-text bg-success text-light" type="submit">
@@ -24,84 +24,23 @@
 <div class="container py-5">
     <div class="row">
         <div class="col-lg-3">
-            <h1 class="h2 pb-4">Categories</h1>
-            <ul class="list-unstyled templatemo-accordion">
-                <a class="collapsed d-flex justify-content-between h4 text-decoration-none"
-                   href="?category=all&page={{ page_obj.number }}">
-                    All
-                </a>
-                {% for category in item_categories %}
-                <a class="collapsed d-flex justify-content-between h4 text-decoration-none"
-                   href="?category={{ category.name_lowercase }}&page=1">
-                    {{ category.name }}
-                </a>
-                {% endfor %}
-            </ul>
 
-            <h1 class="h2 pb-4">Attributes</h1>
-            <ul class="list-unstyled templatemo-accordion">
-                <a class="collapsed d-flex justify-content-between h4 text-decoration-none"
-                   href="?category=all&page={{ page_obj.number }}">
-                    All
-                </a>
-            </ul>
-            <form action="{% url 'core:shop' %}" method="POST">
-                {% csrf_token %}
-                <div class="attribute-selector">
-                    <!-- Screen resolution dropdown selector -->
-                    <div class="dropdown">
-                        <button aria-expanded="false"
-                                class="btn btn-success dropdown-toggle"
-                                data-bs-toggle="dropdown"
-                                id="screen_resolution_dropdown"
-                                type="button">
-                            Screen resolution
-                        </button>
-                        <ul aria-labelledby="multiSelectDropdown"
-                            class="dropdown-menu">
-                            {% for attribute in screen_resolution_attr.values %}
-                            {% for value in attribute %}
-                            <li>
-                                <label>
-                                    <input name="screen_resolution_checkbox"
-                                           type="checkbox"
-                                           value="{{ attribute.value }}">
-                                    {{ value.value }}
+            <!-- Filter form -->
+            <h1 class="h2 pb-4">Filter</h1>
 
-                                </label>
-                            </li>
-                            {% endfor %}
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    <!-- Refresh rate dropdown selector -->
-                    <div class="dropdown">
-                        <button aria-expanded="false"
-                                class="btn btn-success dropdown-toggle"
-                                data-bs-toggle="dropdown"
-                                id="refresh_rate_dropdown"
-                                type="button">
-                            Refresh rate
-                        </button>
-                        <ul aria-labelledby="multiSelectDropdown"
-                            class="dropdown-menu">
-                            {% for attribute in refresh_rate_attr %}
-                            <li>
-                                <label>
-                                    <input name="refresh_rate_checkbox"
-                                           type="checkbox"
-                                           value="{{ attribute.value }}">
-                                    {{ attribute.value }}
-                                </label>
-                            </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </div>
-                <div>
-                    <button type="submit">Apply filters</button>
-                </div>
-            </form>
+            <div class="form-inline">
+                <form action="{% url 'core:shop' %}" method="GET">
+                    {% csrf_token %}
+                    {{ filter_form }}
+
+                    <button class="btn btn-success" type="submit" value="Submit">Apply filters</button>
+                    <button class="btn btn-danger mt-1" type="submit" value="{% url 'core:shop' %}">
+                        Clear filters
+                    </button>
+
+                </form>
+            </div>
+            <!-- Filter form end -->
         </div>
 
 
@@ -117,7 +56,7 @@
                 </div>
             </div>
             <div class="row">
-                {% for item in object_list %}
+                {% for item in filtered_items %}
                 <!-- Item -->
                 <div class="col-md-4">
                     <div class="card mb-4 product-wap rounded-0">

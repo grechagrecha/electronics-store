@@ -48,7 +48,7 @@
                         <h6>Specification:</h6>
                         <ul class="list-unstyled pb-3">
                             {% for attribute in item.attributes.all %}
-                            <li>{{ attribute }}</li>
+                            <li>{{ attribute }}: {{ attribute.values }}</li>
                             {% endfor %}
                         </ul>
 
