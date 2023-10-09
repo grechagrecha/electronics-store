@@ -27,14 +27,22 @@ class ItemAttribute(BaseModel):
 
 
 class Item(BaseModel):
+    class ItemCategoryChoices(models.TextChoices):
+        LAPTOPS = 'LA'
+        COMPUTER_MICE = 'CM'
+        WATCHES = 'WA'
+        CPUS = 'CP'
+        GPUS = 'GP'
+        MONITORS = 'MO'
+
     objects = models.Manager()
 
     id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
-    price = models.IntegerField()
-    units_sold = models.BigIntegerField()
-    units_in_stock = models.BigIntegerField()
+    price = models.IntegerField(default=100)
+    units_sold = models.BigIntegerField(default=0)
+    units_in_stock = models.BigIntegerField(default=0)
     slug = models.SlugField(unique=True, blank=True, editable=False)
     main_image = models.ImageField(default='', upload_to='img/', blank=True)
     featured = models.BooleanField(default=False)
@@ -48,6 +56,12 @@ class Item(BaseModel):
         return reverse('core:product', kwargs={
             'slug': self.slug
         })
+
+    def get_attributes_key_value_pairs(self):
+        attributes = dict()
+
+        for attribute in self.attributes.all():
+            breakpoint()
 
     def get_add_to_cart_url(self):
         return reverse('core:add-to-cart', kwargs={
