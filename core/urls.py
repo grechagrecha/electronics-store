@@ -1,6 +1,7 @@
-from django.urls import path
+from django.urls import path, include
 
 from . import views
+from .api.views import ItemListAPIView
 
 app_name = 'core'
 
@@ -16,4 +17,5 @@ urlpatterns = [
     path('remove-from-cart/<slug>', views.remove_from_cart, name='remove-from-cart'),
     path('order', views.order, name='order'),
 
+    path('api/', include('core.api.urls'))
 ]

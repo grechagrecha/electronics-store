@@ -1,69 +1,31 @@
-from django.views.generic import ListView, DetailView, TemplateView
+from django.views.generic import ListView, DetailView, TemplateView, FormView
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from django.db.models import Q, QuerySet
 
 from .models import Item, ItemCategory, Cart, OrderedItem, ItemAttribute, ItemAttributeValue
+from .filters import ItemFilter
+from .forms import ContactForm
 
 
 class ShopView(ListView):
     model = Item
+    queryset = model.objects.all()
     template_name = 'core/shop.html'
+    context_object_name = 'items'
     paginate_by = 6
-    params_list = dict()
 
-    def get_params_list(self):
-        params_list = dict()
+    filterset = None
 
-        params_list['page'] = self.request.GET.get('page', '1')
-        params_list['category'] = self.request.GET.get('category', None)
-        params_list['screen_resolution'] = self.request.GET.get('screen_resolution', None)
-        params_list['refresh_rate'] = self.request.GET.get('refresh_rate', None)
-
-        return params_list
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        self.filterset = ItemFilter(self.request.GET, queryset=queryset)
+        return self.filterset.qs.order_by('name')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        context['item_categories'] = ItemCategory.objects.all()
-        context['item_attributes'] = ItemAttribute.objects.all()
-        context['screen_resolution_attr'] = ItemAttribute.objects.filter(name='Screen resolution')
-        context['refresh_rate_attr'] = ItemAttribute.objects.filter(name='Refresh rate')
-
+        context['filter_form'] = self.filterset.form
         return context
-
-    def get_queryset(self):
-        qs = self.model.objects.all()
-        params_list = self.get_params_list()
-
-        if not params_list['category'] or params_list['category'] == 'all':
-            return qs.order_by('name')
-
-        # TODO: Implement filtering
-        qs = qs.filter(itemcategory__name_lowercase=params_list['category'])
-
-        if params_list['screen_resolution']:
-            print(qs.filter())
-            qs = qs.filter(attributes__name__in=['screen_resolution'])
-            print(qs)
-
-        return qs.order_by('name')
-
-    def post(self, request):
-        referer = request.META['HTTP_REFERER']
-
-        refresh_rate_list = request.POST.getlist('refresh_rate_checkbox')
-        screen_resolution_list = request.POST.getlist('screen_resolution_checkbox')
-
-        refresh_rate_url = 'refresh_rate=' + '-'.join(refresh_rate_list)
-        screen_resolution_url = 'screen_resolution=' + '-'.join(screen_resolution_list)
-
-        attribute_url = [refresh_rate_url, screen_resolution_url]
-
-        if 'shop?' in referer:
-            pass
-
-        return redirect(request.META['HTTP_REFERER'])
 
 
 class ItemDetailView(DetailView):
@@ -96,9 +58,10 @@ class AboutView(TemplateView):
     template_name = 'core/about.html'
 
 
-class ContactView(TemplateView):
-    model = None
+class ContactView(FormView):
     template_name = 'core/contact.html'
+    form_class = ContactForm
+    success_url = '/'
 
 
 class CartView(ListView):

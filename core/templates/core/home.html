@@ -15,14 +15,16 @@
     <div class="row">
         {% for category in featured_categories %}
         <div class="col-12 col-md-4 p-5 mt-3">
-            <a href="{% url 'core:shop' %}?category={{ category.name_lowercase }}">
+            <a href="{% url 'core:shop' %}?category={{ category.id }}">
                 {% if category.image %}
                 <img class="rounded-circle img-thumbnail border" src="{{ category.image.url }}">
                 {% endif %}
             </a>
             <h5 class="text-center mt-3 mb-3">{{ category.name }}</h5>
-            <p class="text-center"><a class="btn btn-success"
-                                      href="{% url 'core:shop' %}?category={{ category.name_lowercase }}">Go Shop</a>
+            <p class="text-center">
+                <a class="btn btn-success" href="{% url 'core:shop' %}?category={{ category.id }}">
+                    Go Shop
+                </a>
             </p>
         </div>
         {% endfor %}
