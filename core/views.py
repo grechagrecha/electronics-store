@@ -1,11 +1,11 @@
-from django.views.generic import ListView, DetailView, TemplateView
+from django.views.generic import ListView, DetailView, TemplateView, FormView
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from django.db.models import Q, QuerySet
 
 from .models import Item, ItemCategory, Cart, OrderedItem, ItemAttribute, ItemAttributeValue
 from .filters import ItemFilter
-
+from .forms import ContactForm
 
 class ShopView(ListView):
     model = Item
@@ -16,16 +16,16 @@ class ShopView(ListView):
 
     filterset = None
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['filter_form'] = self.filterset.form
-        return context
-
     def get_queryset(self):
         queryset = super().get_queryset()
         self.filterset = ItemFilter(self.request.GET, queryset=queryset)
 
         return self.filterset.qs.order_by('name')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['filter_form'] = self.filterset.form
+        return context
 
 
 class ItemDetailView(DetailView):
@@ -58,9 +58,10 @@ class AboutView(TemplateView):
     template_name = 'core/about.html'
 
 
-class ContactView(TemplateView):
-    model = None
+class ContactView(FormView):
     template_name = 'core/contact.html'
+    form_class = ContactForm
+    success_url = '/'
 
 
 class CartView(ListView):
