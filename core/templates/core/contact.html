@@ -34,10 +34,11 @@
 <!-- Start Contact -->
 <div class="container py-5">
     <div class="row py-5">
-        <div class="form-group">
+        <form method="POST" class="form-group mt-3">
+            {% csrf_token %}
             {{ form }}
-            <input type="submit" class="btn-success">
-        </div>
+            <input type="submit" class="form-control btn-success mt-2">
+        </form>
     </div>
 </div>
 <!-- End Contact -->

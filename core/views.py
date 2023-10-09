@@ -7,6 +7,7 @@ from .models import Item, ItemCategory, Cart, OrderedItem, ItemAttribute, ItemAt
 from .filters import ItemFilter
 from .forms import ContactForm
 
+
 class ShopView(ListView):
     model = Item
     queryset = model.objects.all()
@@ -19,7 +20,6 @@ class ShopView(ListView):
     def get_queryset(self):
         queryset = super().get_queryset()
         self.filterset = ItemFilter(self.request.GET, queryset=queryset)
-
         return self.filterset.qs.order_by('name')
 
     def get_context_data(self, **kwargs):

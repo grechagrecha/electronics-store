@@ -25,6 +25,7 @@ class ItemFilter(django_filters.FilterSet):
     category = django_filters.ModelChoiceFilter(
         queryset=ItemCategory.objects.all(),
         field_name='itemcategory',
+        lookup_expr='exact',
         label='Category',
         widget=Select(attrs={
             'class': 'form-select mb-1'
