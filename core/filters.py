@@ -16,7 +16,7 @@ class ItemFilter(django_filters.FilterSet):
     )
     price = django_filters.NumericRangeFilter(
         field_name='price',
-        label='Price',
+        label='Price range',
         lookup_expr='range',
         widget=RangeWidget(attrs={
             'class': 'form-control mb-1'

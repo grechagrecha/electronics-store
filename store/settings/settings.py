@@ -32,6 +32,7 @@ CUSTOM_APPS = [
     'eav',
     'django_filters',
     'crispy_forms',
+    'crispy_bootstrap4',
     'rest_framework'
 ]
 
@@ -41,6 +42,10 @@ PROJECT_APPS = [
 ]
 
 INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS + PROJECT_APPS
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
+
+CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 DATABASES = {
     'default': {
@@ -127,4 +132,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 SITE_ID = 1
+
+LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
