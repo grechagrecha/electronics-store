@@ -1,7 +1,11 @@
-{% extends 'core/base.html' %}
+{% extends 'accounts/base.html' %}
 
 {% block title %}Your profile{% endblock %}
 
-{% block content %}
+{% block accounts_content %}
+
+<div class="containter d-flex justify-content-center align-items-center">
+    {{ user }}
+</div>
 
 {% endblock %}

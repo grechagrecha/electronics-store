@@ -89,12 +89,12 @@ def add_to_favourites(request, *args, **kwargs):
 
 def add_to_cart(request, slug):
     if not request.user.is_authenticated:
-        return redirect('account_login')
+        return redirect('accounts:login')
 
     http_referer_url = request.META['HTTP_REFERER']
 
     item = get_object_or_404(Item, slug=slug)
-    ordered_item, created = OrderedItem.objects.get_or_create(item=item, user=request.user, ordered=False)
+    ordered_item, _ = OrderedItem.objects.get_or_create(item=item, user=request.user, ordered=False)
     cart_qs = Cart.objects.filter(user=request.user, ordered=False)
 
     if cart_qs.exists():
