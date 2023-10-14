@@ -33,7 +33,10 @@
 
             <div class="form-inline">
                 <form action="{% url 'core:shop' %}" method="GET">
-                    {{ filter_form }}
+                    {{ filter_form.category }}
+                    {{ filter_form.name }}
+                    {{ filter_form.price }}
+
 
                     <button class="btn btn-success mt-1" type="submit" value="Submit">Apply filters</button>
                     <button class="btn btn-danger mt-1">
