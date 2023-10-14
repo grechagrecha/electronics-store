@@ -9,7 +9,7 @@ SECRET_KEY = str(os.getenv('SECRET_KEY'))
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-DEBUG = True
+DEBUG = str(os.getenv('DEBUG'))
 
 ALLOWED_HOSTS = [
     'grechagrecha.pythonanywhere.com',
