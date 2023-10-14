@@ -94,7 +94,7 @@ def add_to_cart(request, slug):
     http_referer_url = request.META['HTTP_REFERER']
 
     item = get_object_or_404(Item, slug=slug)
-    ordered_item, created = OrderedItem.objects.get_or_create(item=item, user=request.user, ordered=False)
+    ordered_item, _ = OrderedItem.objects.get_or_create(item=item, user=request.user, ordered=False)
     cart_qs = Cart.objects.filter(user=request.user, ordered=False)
 
     if cart_qs.exists():
