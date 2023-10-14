@@ -4,16 +4,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Profile{% endblock %}</title>
+    <title>{% block title %}ExpensiveTrash{% endblock %}</title>
 
-    <link rel="apple-touch-icon" href="{% static 'core/img/apple-icon.png' %}">
-    <link rel="shortcut icon" type="image/x-icon" href="{% static 'core/img/favicon.ico' %}">
+    <link href="{% static 'core/img/apple-icon.png' %}" rel="apple-touch-icon">
+    <link href="{% static 'core/img/favicon.ico' %}" rel="shortcut icon" type="image/x-icon">
 
-    <link rel="stylesheet" href="{% static 'core/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'core/css/templatemo.css' %}">
-    <link rel="stylesheet" href="{% static 'core/css/custom.css' %}">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap">
-    <link rel="stylesheet" href="{% static 'core/css/fontawesome.min.css' %}">
+    <link href="{% static 'core/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'core/css/templatemo.css' %}" rel="stylesheet">
+    <link href="{% static 'core/css/custom.css' %}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;400;500;700;900&display=swap"
+          rel="stylesheet">
+    <link href="{% static 'core/css/fontawesome.min.css' %}" rel="stylesheet">
 </head>
 <body>
     {% include 'core/navbar.html' %}
@@ -25,11 +26,11 @@
     {% include 'core/footer.html' %}
 
     <!-- Start Script -->
--    <script src="{% static 'core/js/jquery-1.11.0.min.js' %}"></script>
--    <script src="{% static 'core/js/jquery-migrate-1.2.1.min.js' %}"></script>
--    <script src="{% static 'core/js/bootstrap.bundle.min.js' %}"></script>
--    <script src="{% static 'core/js/templatemo.js' %}"></script>
--    <script src="{% static 'core/js/custom.js' %}"></script>
--    <!-- End Script -->
+    <script src="{% static 'core/js/jquery-1.11.0.min.js' %}"></script>
+    <script src="{% static 'core/js/jquery-migrate-1.2.1.min.js' %}"></script>
+    <script src="{% static 'core/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'core/js/templatemo.js' %}"></script>
+    <script src="{% static 'core/js/custom.js' %}"></script>
+    <!-- End Script -->
 </body>
 </html>

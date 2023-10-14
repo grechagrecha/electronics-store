@@ -1,6 +1,10 @@
 {% extends 'core/base.html' %}
 {% load static %}
+
+{% block title %}{{ item.name }}{% endblock %}
+
 {% block content %}
+
 <!-- Modal -->
 <div aria-hidden="true"
      aria-labelledby="exampleModalLabel"
