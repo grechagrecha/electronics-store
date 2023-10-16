@@ -13,7 +13,7 @@ class ItemFilter(django_filters.FilterSet):
         label='Category',
         empty_label='All',
         widget=Select(attrs={
-            'class': 'form-select mb-1'
+            'class': 'form-select'
         })
     )
 
@@ -22,27 +22,28 @@ class ItemFilter(django_filters.FilterSet):
         lookup_expr='icontains',
         label='',
         widget=TextInput(attrs={
-            'class': 'form-control mb-1',
+            'class': 'form-control',
             'placeholder': 'Name'
         })
     )
-    price = django_filters.NumericRangeFilter(
+    price = django_filters.RangeFilter(
         field_name='price',
         label='Price',
         lookup_expr='range',
         widget=RangeWidgetWith2Placeholders(
+            attrs={
+                'class': 'form-control mb-1'
+            },
             from_attrs={
+                'class': 'mb-5',
                 'placeholder': 'Price from'
             },
             to_attrs={
                 'placeholder': 'Price to'
-            },
-            attrs={
-                'class': 'form-control mb-1'
             }
+
         )
     )
-
 
     class Meta:
         model = Item
