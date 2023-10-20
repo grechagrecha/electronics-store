@@ -1,6 +1,8 @@
 {% extends 'accounts/base.html' %}
 {% load crispy_forms_tags %}
 
+{% block title %}Login{% endblock %}
+
 {% block content %}
 <form method="POST" class="my-3 mx-5">
     {% csrf_token %}

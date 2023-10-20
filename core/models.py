@@ -44,7 +44,7 @@ class Item(BaseModel):
     units_sold = models.BigIntegerField(default=0)
     units_in_stock = models.BigIntegerField(default=0)
     slug = models.SlugField(unique=True, blank=True, editable=False)
-    main_image = models.ImageField(default='', upload_to='img/', blank=True)
+    main_image = models.ImageField(default='', upload_to='img/items/', blank=True)
     featured = models.BooleanField(default=False)
 
     attributes = models.ManyToManyField(ItemAttribute, blank=True)
