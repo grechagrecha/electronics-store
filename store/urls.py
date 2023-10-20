@@ -9,7 +9,7 @@ app_name = 'store'
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('core.urls')),
-    path('accounts/', include('accounts.urls')),
+    path('users/', include('users.urls')),
 ]
 
 urlpatterns += static(STATIC_URL, document_root=STATIC_ROOT)

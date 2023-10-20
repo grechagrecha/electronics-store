@@ -29,3 +29,15 @@ Custom Css
     text-decoration: none;
     
 }
+
+#hint_id_username {
+    color: black !important;
+}
+
+#hint_id_password1 {
+    color:black !important;
+}
+
+#hint_id_password2 {
+    color:black !important;
+}

@@ -89,7 +89,7 @@ def add_to_favourites(request, *args, **kwargs):
 
 def add_to_cart(request, slug):
     if not request.user.is_authenticated:
-        return redirect('accounts:login')
+        return redirect('users:login')
 
     http_referer_url = request.META['HTTP_REFERER']
 
