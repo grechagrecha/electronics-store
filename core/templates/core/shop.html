@@ -5,35 +5,29 @@
 
 {% block content %}
 
-
-<div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade bg-white" id="templatemo_search"
-     role="dialog" tabindex="-1">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="w-100 pt-1 mb-5 text-right">
-            <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
-        </div>
-        <form action="" class="modal-content modal-body border-0 p-0" method="GET">
-            <div class="input-group mb-2">
-                <input class="form-control" id="inputModalSearch" name="q" placeholder="Search ..." type="text">
-                <button class="input-group-text bg-success text-light" type="submit">
-                    <i class="fa fa-fw fa-search text-white"></i>
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
-
-
 <!-- Start Content -->
 <div class="container py-5">
     <div class="row">
         <!-- Filter form -->
         <div class="col-lg-3">
             <h1 class="h2 pb-3">Filter</h1>
-
             <div class="form-inline">
                 <form action="{% url 'core:shop' %}" method="GET">
-                    {{ filter_form }}
+                    <i class="fas fa-cat"></i>
+                    <div class="mb-3">
+                        {{ filter_form.category }}
+                    </div>
+
+                    <i class="fa fas fa-signature"></i>
+                    <div class="mb-3">
+                        {{ filter_form.name }}
+                    </div>
+
+                    <i class="fa fa-solid fa-dollar-sign"></i>
+                    <div class="mb-3">
+                        {{ filter_form.price }}
+                    </div>
+
 
                     <button class="btn btn-success mt-1" type="submit" value="Submit">Apply filters</button>
                     <button class="btn btn-danger mt-1">

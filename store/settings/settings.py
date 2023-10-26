@@ -38,7 +38,7 @@ CUSTOM_APPS = [
 
 PROJECT_APPS = [
     'core.apps.CoreConfig',
-    'accounts.apps.AccountsConfig'
+    'users.apps.UsersConfig'
 ]
 
 INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS + PROJECT_APPS
@@ -131,8 +131,10 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
+AUTH_USER_MODEL = 'users.User'
+
 SITE_ID = 1
 
-LOGIN_URL = '/accounts/login/'
+LOGIN_URL = '/users/login/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
